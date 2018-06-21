@@ -1,4 +1,4 @@
-package com.blueline.net.tools.sftp
+package com.blueline.tool.service.sftp
 
 import com.alibaba.fastjson.JSON
 import org.apache.sshd.common.NamedFactory
