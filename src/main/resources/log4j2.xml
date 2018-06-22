@@ -7,7 +7,7 @@
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level - %msg%n"/>
         </Console>
-        <RollingFile name="RUN-LOG" fileName="${LOG_HOME}/proxy-log/current.log"
+        <RollingFile name="RUN-LOG" fileName="${LOG_HOME}/sftp-log/current.log"
                      filePattern="${LOG_HOME}/proxy-log/$${date:yyyy-MM}/proxy_%d{yyyyMMdd}.log">
             <!--<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>-->
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level - %msg%n"/>
@@ -31,7 +31,7 @@
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="CONFIG-LOG"/>
         </logger>
-        <Root level="warn">
+        <Root level="INFO">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="RUN-LOG"/>
         </Root>

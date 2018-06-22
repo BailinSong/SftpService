@@ -1,50 +1,58 @@
-var tcpproxy = angular.module('tcpproxy');
+var sftpuser = angular.module('SftpUser');
 
-tcpproxy.controller('home',function($scope, $http){
-    $scope.proxies = [];
-    $scope.addProxy = function(){
-        $http.post('/servers',$scope.proxy).then(function success(response){
-            $scope.proxies.push(response.data);
-            $scope.proxy = {};
-            $scope.proxyForm.$setPristine();
-            $scope.$apply();
-        },
-        function error(response){
-            console.error(response);
-        });
+sftpuser.controller('home', function ($scope, $http) {
+    $scope.users = [];
+
+
+    $scope.addUser = function () {
+        console.info($scope.userForm)
+        if(!$scope.userForm.$invalid) {
+            $http.post('/users', $scope.user).then(function success(response) {
+                    $scope.users.push(response.data);
+                    $scope.user = {};
+                    Materialize.toast('用户创建成功!', 4000)
+                    // $scope.userForm.$setPristine();
+                    // $scope.$apply();
+                },
+                function error(response) {
+                    console.error(response);
+                    Materialize.toast('用户创建失败!', 4000)
+                });
+        }
     }
-    $http.get("/servers").then(function success(response){
-        angular.forEach(response.data,function(p,key){
-            $scope.proxies.push(p);
-        }, function error(response){
 
+    $http.get("/users").then(function success(response) {
+        angular.forEach(response.data, function (p, key) {
+            $scope.users.push(p);
+        }, function error(response) {
+            console.error(response);
+            Materialize.toast('拉取用户列表失败!', 4000)
         })
     });
 
-    $scope.toggleStatus = function(id,$event){
-        $http.post('/servers/'+id+'/status',{active: $event}).then(function success(response){
+    $scope.deleteUser = function (userName) {
+        $http.delete('/users/' + userName).then(function success(response) {
+            $scope.users.forEach(function (p) {
+                if (p.userName == userName){
+                    p.delete = true;
+                    Materialize.toast('用户删除成功!', 4000)
+                }
 
-        }, function error(response){
-            console.error(response);
-        });
-    }
-    $scope.toggleDebug = function(id,$event){
-        $http.post('/servers/'+id+'/debug',{debug: $event}).then(function success(response){
-
-        }, function error(response){
-            console.error(response);
-        });
-    }
-
-    $scope.deleteServer = function(id){
-        $http.delete('/servers/'+id).then(function success(response){
-            $scope.proxies.forEach(function(p){
-                if(p.id==id)
-                    p.delete=true;
             });
-        }, function error(response){
+        }, function error(response) {
             console.error(response);
+            Materialize.toast('用户删除失败!', 4000)
         });
+    }
+
+    $scope.shutdown=function(){
+        $http.post('/shutdown').then(function success(response) {
+                Materialize.toast('系统关闭成功!', 4000)
+            },
+            function error(response) {
+                console.error(response);
+                Materialize.toast('系统关闭失败!', 4000)
+            });
     }
 
 });

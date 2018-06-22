@@ -15,12 +15,20 @@
     <artifactId>sftp-service</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <name>sftp-service</name>
+    <description>Simple sftp server service using sshd</description>
 
     <properties>
+        <java.version>1.6</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <log4j2.version>2.3</log4j2.version>
+        <jetty.version>8.2.0.v20160908</jetty.version>
+        <tomcat.version>7.0.59</tomcat.version>
         <kotlin.version>1.2.50</kotlin.version>
     </properties>
-
-
     <dependencies>
         <dependency>
             <groupId>org.apache.sshd</groupId>
@@ -37,11 +45,6 @@
             <artifactId>kotlin-test-junit</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-coroutines-jdk8</artifactId>
-            <version>0.22.5</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -86,6 +89,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-web</artifactId>
+            <version>${log4j2.version}</version>
         </dependency>
     </dependencies>
 
@@ -127,7 +131,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jvmTarget>1.8</jvmTarget>
+                    <jvmTarget>${java.version}</jvmTarget>
                 </configuration>
             </plugin>
         </plugins>

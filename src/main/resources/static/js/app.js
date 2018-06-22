@@ -1,13 +1,13 @@
-var tcpproxy = angular.module('tcpproxy', ['ngRoute','ui.materialize','pageslide-directive','chart.js'])
+var sftpuser = angular.module('SftpUser', ['ngRoute','ui.materialize','pageslide-directive','chart.js'])
 
-tcpproxy.config(function ($routeProvider, $httpProvider) {
+sftpuser.config(function ($routeProvider, $httpProvider) {
     $routeProvider
         .when('/', {
             templateUrl: 'views/home.html',
             controller: 'home'
-        }).when('/proxy/:id',{
-            templateUrl: 'views/proxy.html',
-            controller: 'proxy'
+        }).when('/shutdown', {
+        templateUrl: 'views/shutdown.html',
+        controller: 'shutdown'
     })
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 });
