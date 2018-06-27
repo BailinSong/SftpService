@@ -45,6 +45,27 @@ sftpuser.controller('home', function ($scope, $http) {
         });
     }
 
+    $scope.patchUser = function (userName,enable) {
+        $http.patch('/users/' + userName,{'enable':enable}).then(function success(response) {
+            $scope.users.forEach(function (p) {
+                if (p.userName == userName){
+                    p.enable = enable;
+                    if(enable){
+                        Materialize.toast('用户以启用!', 4000)
+                    }else{
+                        Materialize.toast('用户以禁用!', 4000)
+                    }
+
+
+                }
+
+            });
+        }, function error(response) {
+            console.error(response);
+            Materialize.toast('用户状态修改失败!', 4000)
+        });
+    }
+
     $scope.shutdown=function(){
         $http.post('/shutdown').then(function success(response) {
                 Materialize.toast('系统关闭成功!', 4000)

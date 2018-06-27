@@ -37,7 +37,7 @@ class SftpService : ServerService {
         properties[SshServer.IDLE_TIMEOUT] = 0
 
         passwordAuthenticator = PasswordAuthenticator { username, password, _ ->
-            userMap[username]?.let { it.passWord.trim() == password.trim() } ?: false
+            userMap[username]?.let { it.passWord.trim() == password.trim() && it.enable } ?: false
         }
 
         val namedFactoryList = ArrayList<NamedFactory<Command>>()

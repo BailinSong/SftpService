@@ -1,0 +1,13 @@
+.shutdown{
+    position: absolute;
+    right: -25px;
+    top: -15px;
+    transform: rotate(45deg);
+}
+body{
+    overflow-x: hidden;
+}
+/*td{*/
+    /*vertical-align: middle;*/
+    /*line-height: 100%;*/
+/*}*/

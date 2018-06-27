@@ -60,4 +60,14 @@ constructor(private val service: ServerService) {
         configLogger.info("{} - {}", "DELETE", proxyDefinition)
         return ResponseEntity(proxyDefinition, HttpStatus.OK)
     }
+
+    @RequestMapping(method = [(RequestMethod.PATCH)], value = ["/{userName}"])
+    fun patchUser(@PathVariable("userName") userName: String,@RequestBody data:Map<String, Object>): ResponseEntity<*> {
+        val proxyDefinition = service.get(userName)
+        val enable=data["enable"].toString().toBoolean()
+        proxyDefinition!!.enable=enable
+        storageService!!.saveUserInfo(proxyDefinition)
+        configLogger.info("{} - {}", "PATCH", proxyDefinition)
+        return ResponseEntity(proxyDefinition, HttpStatus.OK)
+    }
 }
