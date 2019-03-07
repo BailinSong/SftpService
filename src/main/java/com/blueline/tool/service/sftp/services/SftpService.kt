@@ -1,13 +1,12 @@
 package com.blueline.tool.service.sftp.services
 
-import com.alibaba.fastjson.JSON
 import com.blueline.tool.service.sftp.domain.UserInfo
 import org.apache.sshd.common.NamedFactory
 import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory
 import org.apache.sshd.common.session.Session
-import org.apache.sshd.server.Command
 import org.apache.sshd.server.SshServer
 import org.apache.sshd.server.auth.password.PasswordAuthenticator
+import org.apache.sshd.server.command.Command
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.apache.sshd.server.subsystem.sftp.SftpSubsystemFactory
 import org.springframework.beans.factory.annotation.Value
@@ -31,41 +30,41 @@ class SftpService : ServerService {
     private val userMap = ConcurrentHashMap<String, UserInfo>()
 
     init {
-        with(sshServer){
-        port = sftpPort
-        keyPairProvider = SimpleGeneratorHostKeyProvider()
-        properties[SshServer.IDLE_TIMEOUT] = 0
+        with(sshServer) {
+            port = sftpPort
+            keyPairProvider = SimpleGeneratorHostKeyProvider()
+            properties[SshServer.IDLE_TIMEOUT] = 0
 
-        passwordAuthenticator = PasswordAuthenticator { username, password, _ ->
-            userMap[username]?.let { it.passWord.trim() == password.trim() && it.enable } ?: false
-        }
-
-        val namedFactoryList = ArrayList<NamedFactory<Command>>()
-
-        namedFactoryList.add(SftpSubsystemFactory())
-        subsystemFactories = namedFactoryList
-        fileSystemFactory = object : VirtualFileSystemFactory(Paths.get(File(sftpRootPath).canonicalPath)) {
-
-            override fun computeRootDir(session: Session): Path? {
-
-                return userMap[session.username]?.let { user ->
-                    when (user.rootPath[0]) {
-                        '/' -> user.rootPath.substring(1)
-                        '\\' -> user.rootPath.substring(1)
-                        '@' -> "@${File(user.rootPath.substring(1)).canonicalPath}"
-                        else -> user.rootPath
-                    }.let {
-                        when {
-                            it.startsWith('@') -> Paths.get(it.substring(1))
-                            else -> Paths.get("$defaultHomeDir/${if (user.rootPath.isBlank()) user.userName else it}")
-                        }.apply {
-                            this.toFile().mkdir()
-                        }
-                    }
-                } ?: throw RuntimeException("$session.username not in the user information list")
-
+            passwordAuthenticator = PasswordAuthenticator { username, password, _ ->
+                userMap[username]?.let { it.passWord.trim() == password.trim() && it.enable } ?: false
             }
-        }
+
+            val namedFactoryList = ArrayList<NamedFactory<Command>>()
+
+            namedFactoryList.add(SftpSubsystemFactory())
+            subsystemFactories = namedFactoryList
+            fileSystemFactory = object : VirtualFileSystemFactory(Paths.get(File(sftpRootPath).canonicalPath)) {
+
+                override fun computeRootDir(session: Session): Path? {
+
+                    return userMap[session.username]?.let { user ->
+                        when (user.rootPath[0]) {
+                            '/' -> user.rootPath.substring(1)
+                            '\\' -> user.rootPath.substring(1)
+                            '@' -> "@${File(user.rootPath.substring(1)).canonicalPath}"
+                            else -> user.rootPath
+                        }.let {
+                            when {
+                                it.startsWith('@') -> Paths.get(it.substring(1))
+                                else -> Paths.get("$defaultHomeDir/${if (user.rootPath.isBlank()) user.userName else it}")
+                            }.apply {
+                                this.toFile().mkdir()
+                            }
+                        }
+                    } ?: throw RuntimeException("$session.username not in the user information list")
+
+                }
+            }
         }
     }
 

@@ -8,7 +8,7 @@
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level - %msg%n"/>
         </Console>
         <RollingFile name="RUN-LOG" fileName="${LOG_HOME}/sftp-log/current.log"
-                     filePattern="${LOG_HOME}/proxy-log/$${date:yyyy-MM}/proxy_%d{yyyyMMdd}.log">
+                     filePattern="${LOG_HOME}/sftp-log/$${date:yyyy-MM}/sftp_%d{yyyyMMdd}.log">
             <!--<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>-->
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level - %msg%n"/>
             <Policies>
@@ -17,7 +17,7 @@
             </Policies>
         </RollingFile>
         <RollingFile name="CONFIG-LOG" fileName="${LOG_HOME}/config-log/current.log"
-                     filePattern="${LOG_HOME}/config-log/$${date:yyyy-MM}/proxy_%d{yyyyMMdd}.log">
+                     filePattern="${LOG_HOME}/config-log/$${date:yyyy-MM}/sftp_%d{yyyyMMdd}.log">
             <!--<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>-->
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} - %msg%n"/>
             <Policies>
